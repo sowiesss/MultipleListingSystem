@@ -20,10 +20,6 @@ public abstract class ResidentialService extends PropertyService{
         super(propertyRepo);
         this.residentialRepo = (ResidentialRepo) propertyRepo;
     }
-
-//todo client can not access repo
-    public ResidentialRepo getResidentialRepo() {
-        return residentialRepo;
-    }
     // Other basic crud methods are inherited from ABS PropertyService class
+
 }

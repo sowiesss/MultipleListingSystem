@@ -1,5 +1,4 @@
 package mls.server_property;
-
 import mls.server_property.domain.*;
 import mls.server_property.repositories.*;
 
