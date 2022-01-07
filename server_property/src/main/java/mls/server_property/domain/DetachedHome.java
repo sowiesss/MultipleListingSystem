@@ -12,9 +12,9 @@ public class DetachedHome extends Freehold {
      * @param address the address of the new DatachedHome
      * @param price the price of the new DatachedHome
      */
-    public DetachedHome(Long uuid, String address, int price) {
-        super( address, price);
-    }
+//    public DetachedHome(Long uuid, String address, int price) {
+//        super(uuid, address, price);
+//    }
 
 
 

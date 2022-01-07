@@ -12,6 +12,7 @@ public abstract class ResidentialService extends PropertyService{
     // Use class specific xxxRepo for additional method implementations
     private ResidentialRepo residentialRepo;
 
+//todo qualifier, parameter type ResidentialRepo
     // Constructor injection & Alias cast
     // In case of multiple inheritance,specify Qualifier("xxxRepo") the same as @Repository("xxxRepo")
     @Autowired
@@ -19,7 +20,6 @@ public abstract class ResidentialService extends PropertyService{
         super(propertyRepo);
         this.residentialRepo = (ResidentialRepo) propertyRepo;
     }
-
     // Other basic crud methods are inherited from ABS PropertyService class
 
 }
