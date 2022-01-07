@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface PropertyRepo extends JpaRepository<Property, Long> {
+public interface PropertyRepo extends JpaRepository< Property , Long> {
 
     // Duplicate queries
     Optional<Property> findPropertyByAddress(String address);

@@ -1,15 +1,20 @@
 package mls.server_property;
 
-import mls.server_property.domain.VacationHome;
-import mls.server_property.repositories.VocationHomeRepo;
+import mls.server_property.domain.*;
+import mls.server_property.repositories.*;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.Date;
+import java.util.List;
+import java.util.Optional;
+
 @SpringBootTest
 class ServerPropertyApplicationTests {
     @Autowired
-    VocationHomeRepo vhRepo;
+    VacationHomeRepo vhRepo;
 	@Test
 	void contextLoads() {
         VacationHome vh1 = new VacationHome("a", 1000000);
@@ -20,7 +25,7 @@ class ServerPropertyApplicationTests {
         vhRepo.save(vh2);
         vhRepo.save(vh3);
         vhRepo.save(vh4);
-        vhRepo.delete(vh2);
+        Optional<List<Residential>> td = vhRepo.findResidentialByEntryDate(Date.valueOf("2022-1-7"));
 
 	}
 
