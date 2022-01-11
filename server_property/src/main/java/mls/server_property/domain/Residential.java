@@ -34,6 +34,14 @@ public abstract class Residential extends Property {
     @Column(name = "is_new")
     private   boolean isNew;
 
+    public void setHighValue(boolean highValue) {
+        isHighValue = highValue;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
     protected Residential(){super();}       // empty constructor a must
 
     /**
@@ -45,7 +53,8 @@ public abstract class Residential extends Property {
                        @JsonProperty("no_parking_space") int nOfParkingSpace,
                        @JsonProperty("storage_type") String storageType,
                        @JsonProperty("no_storage") int nOfStorages,
-                       @JsonProperty("build_date") Date builtDate) {
+                       @JsonProperty("build_date") Date builtDate
+                        ) {
         super(id, address, price);
         this.nOfParkingSpace = nOfParkingSpace;
         this.storageType = storageType;
