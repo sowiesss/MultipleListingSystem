@@ -1,19 +1,26 @@
 package mls.server_property.domain;
-//todo
-// constuctors, uuid, JPA annotations
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.*;
+import java.sql.Date;
 
+@Entity
+//@Inheritance(strategy = InheritanceType.JOINED)
+//@DiscriminatorValue("c")
+//@DiscriminatorColumn(name = "c_type")
 public abstract class Condominium extends Residential {
-
+    @Column(name = "unit_number")
     private int unitNumber;
 
-    /**
-     * Subclass constructor must call superclass's non-private constructor for inheritance.
-     * @param uuid the unique uuid of the property
-     * @param address the unique address of the property, with unit No. if applicable
-     * @param price selling price of the listed property
-     */
-    public Condominium(Long uuid, String address, int price) {
-        super(address, price);
+    protected Condominium(){super();}
+
+    @JsonCreator
+    public Condominium(@JsonProperty("id") Long id, @JsonProperty("address") String address,
+                       @JsonProperty("price") int price, @JsonProperty("no_parking_space") int nOfParkingSpace,
+                       @JsonProperty("storage_type") String storageType, @JsonProperty("no_storage") int nOfStorages,
+                       @JsonProperty("build_date") Date builtDate, @JsonProperty("unit_No") int unitNumber) {
+        super(id, address, price, nOfParkingSpace, storageType, nOfStorages, builtDate);
+        this.unitNumber = unitNumber;
     }
 
     /**
@@ -41,6 +48,7 @@ public abstract class Condominium extends Residential {
         this.unitNumber = unitNumber;
     }
 
+
     /**
      * Override equals() method. Evaluate objects' equality using attribute values.
      * For simplification, it is assumed that same address and unit number represents same property.
@@ -63,8 +71,7 @@ public abstract class Condominium extends Residential {
      */
     @Override
     public String toString() {
-        return  super.toString() +
-                ", unitNumber=" + unitNumber;
+        return  super.toString() + ", unitNumber=" + unitNumber;
     }
 
 }

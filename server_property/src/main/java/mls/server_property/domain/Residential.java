@@ -9,10 +9,10 @@ import java.time.LocalDate;
 
 import static java.time.temporal.ChronoUnit.YEARS;
 
-/**
- * Abstract class representing Residential Property (level 2)
- */
-@MappedSuperclass
+@Entity
+//@DiscriminatorColumn(name="r_type")
+//@DiscriminatorValue("r")
+//@Table(name="residential")
 public abstract class Residential extends Property {
     /**
      * The reference price used to decide whether a home is high value.
@@ -29,45 +29,58 @@ public abstract class Residential extends Property {
     private   Date   builtDate = Date.valueOf("1900-1-1");
     @Column(name="entry_date")
     private   Date   entryDate; // the day on which the object is entered in the system
+    @Column(name = "is_high_value")
+    private   boolean isHighValue;
+    @Column(name = "is_new")
+    private   boolean isNew;
 
-    public Residential(){super();}
+    public void setHighValue(boolean highValue) {
+        isHighValue = highValue;
+    }
 
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
+    protected Residential(){super();}       // empty constructor a must
+
+    /**
+      * Full args constructor to be called in the subclass constructor.
+      */
     @JsonCreator
-    public Residential(@JsonProperty("id") Long id,@JsonProperty("address") String address,
+    public Residential(@JsonProperty("id") Long id, @JsonProperty("address") String address,
                        @JsonProperty("price") int price,
-                       @JsonProperty("nOfParkingSpace") int nOfParkingSpace,
-                       @JsonProperty("storageType") String storageType,
-                       @JsonProperty("nOfStorages") int nOfStorages,
-                       @JsonProperty("builtDate") Date builtDate) {
+                       @JsonProperty("no_parking_space") int nOfParkingSpace,
+                       @JsonProperty("storage_type") String storageType,
+                       @JsonProperty("no_storage") int nOfStorages,
+                       @JsonProperty("build_date") Date builtDate
+                        ) {
         super(id, address, price);
         this.nOfParkingSpace = nOfParkingSpace;
         this.storageType = storageType;
         this.nOfStorages = nOfStorages;
-        this.builtDate = builtDate;
-        this.entryDate= Date.valueOf(LocalDate.now());  // auto generate entryDate
+        if (builtDate!=null) {
+            this.builtDate = builtDate;
+        }
+        this.entryDate= Date.valueOf(LocalDate.now());
+        this.isHighValue = this.getPrice() >= REFER_PRICE;
+        this.isNew = builtDate!= null?
+                YEARS.between(this.builtDate.toLocalDate(), LocalDate.now()) < 5
+                :false;
     }
 
-//    @JsonCreator
-//    public Residential(@JsonProperty("id") Long id, @JsonProperty("address") String address, @JsonProperty("price") int price) {
-//        super(id, address, price);
-//        this.entryDate= Date.valueOf(LocalDate.now());
-//    }
-
-    /**
-     * Check if the home is a high valued home.
-     * @return ture, if the calling object is a high value home;
-     */
     public boolean isHighValue() {
-        return this.getPrice() >= REFER_PRICE;
+        return isHighValue;
     }
 
-    /**
-     * Check if the building is a new construction at present.
-     * @return true, if the building is constructed within 5 years;
-     *          false, if it has been built more than 5 years.
-     */
-    public boolean isNew(){
-        return YEARS.between(this.builtDate.toLocalDate(), LocalDate.now()) < 5;
+    @Override
+    public void setPrice(int price) {
+        this.setPrice(price);
+        this.isHighValue = this.getPrice() >= REFER_PRICE;
+    }
+
+    public boolean isNew() {
+        return isNew;
     }
 
     /**
@@ -79,8 +92,12 @@ public abstract class Residential extends Property {
     public void setBuiltDate(LocalDate d) throws IllegalArgumentException{
         if (d.isAfter(entryDate.toLocalDate()))
             throw new IllegalArgumentException("Built date after today");
-        else
+        else {
             this.builtDate = Date.valueOf(d);
+            this.isNew = builtDate!= null?
+                    YEARS.between(this.builtDate.toLocalDate(), LocalDate.now()) < 5
+                    :false;
+        }
     }
 
     /**
