@@ -13,10 +13,10 @@ public abstract class Freehold extends Residential {
     private String type;
 
     @Column(name = "floors")
-    private int numberOfFloors;
+    private Integer numberOfFloors;
 
     @Column(name = " is_multi_gen")
-    private boolean isMultigeneration;
+    private Boolean isMultigeneration;
 
     protected Freehold(){super();}
 
@@ -45,7 +45,7 @@ public abstract class Freehold extends Residential {
         this.type = type;
     }
 
-    public int getNumberOfFloors() {
+    public Integer getNumberOfFloors() {
         return numberOfFloors;
     }
 
@@ -58,7 +58,7 @@ public abstract class Freehold extends Residential {
         this.numberOfFloors = numberOfFloors;
     }
 
-    public boolean isMultigeneration() {
+    public Boolean isMultigeneration() {
         return this.isMultigeneration;
     }
 

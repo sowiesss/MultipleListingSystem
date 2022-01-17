@@ -19,20 +19,21 @@ public abstract class Residential extends Property {
      */
     public static final int REFER_PRICE = 750000;
 
+    // !! Must be wrapper class "Integer" instead of "int" because DB by default assigns null
     @Column(name="no_parking_space")
-    private   int         nOfParkingSpace;
+    private   Integer     nOfParkingSpace;
     @Column(name="storage_type")
     private   String      storageType;
     @Column(name="no_storage")
-    private   int         nOfStorages;
+    private   Integer     nOfStorages;
     @Column(name="build_date")
     private   Date   builtDate = Date.valueOf("1900-1-1");
     @Column(name="entry_date")
     private   Date   entryDate; // the day on which the object is entered in the system
     @Column(name = "is_high_value")
-    private   boolean isHighValue;
+    private   Boolean isHighValue;
     @Column(name = "is_new")
-    private   boolean isNew;
+    private   Boolean isNew;
 
     public void setHighValue(boolean highValue) {
         isHighValue = highValue;
@@ -64,22 +65,20 @@ public abstract class Residential extends Property {
         }
         this.entryDate= Date.valueOf(LocalDate.now());
         this.isHighValue = this.getPrice() >= REFER_PRICE;
-        this.isNew = builtDate!= null?
-                YEARS.between(this.builtDate.toLocalDate(), LocalDate.now()) < 5
-                :false;
+        this.isNew = builtDate != null && YEARS.between(this.builtDate.toLocalDate(), LocalDate.now()) < 5;
     }
 
-    public boolean isHighValue() {
+    public Boolean isHighValue() {
         return isHighValue;
     }
 
     @Override
     public void setPrice(int price) {
-        this.setPrice(price);
+        super.setPrice(price);
         this.isHighValue = this.getPrice() >= REFER_PRICE;
     }
 
-    public boolean isNew() {
+    public Boolean isNew() {
         return isNew;
     }
 
@@ -94,9 +93,7 @@ public abstract class Residential extends Property {
             throw new IllegalArgumentException("Built date after today");
         else {
             this.builtDate = Date.valueOf(d);
-            this.isNew = builtDate!= null?
-                    YEARS.between(this.builtDate.toLocalDate(), LocalDate.now()) < 5
-                    :false;
+            this.isNew = YEARS.between(this.builtDate.toLocalDate(), LocalDate.now()) < 5;
         }
     }
 
@@ -112,7 +109,7 @@ public abstract class Residential extends Property {
      * Methods from the ParkingSpace interface. Get number of parking spaces.
      * @return number of parking spaces
      */
-    public int howManyParkingSpace(){
+    public Integer howManyParkingSpace(){
         return this.nOfParkingSpace;
     }
 
@@ -128,7 +125,7 @@ public abstract class Residential extends Property {
      * Get the number of storages attached to this home.
      * @return number of storages of the calling Residential object.
      */
-    public int howManyStorage(){
+    public Integer howManyStorage(){
         return this.nOfStorages;
     }
 
